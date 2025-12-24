@@ -100,17 +100,18 @@ void* gfx_get_arr_data_ptr(void* ptr){
 }
 
 //original address: $08002abc
-void* gfx_get_arr_data_obj(void* ptr, uint16_t num){
+void* gfx_get_arr_data_obj(uint16_t* ptr, uint16_t num){
+    uint16_t* ent = ptr + 1;
+    uint16_t* ent2 = 0;
     uint16_t i = 0;
-    uint16_t* ent = &((uint16_t*)ptr)[1];
+
     do {
-        ent = (uint16_t*)((uint8_t*)ent + (*ent * 6));
-        ent += 2;
-        ent = (uint16_t*)((uint8_t*)ent + (*ent * 6));
-        i++;
+        ent2 = ent + (*ent * 3) + 1;
+        ent = ent2 + (*ent2 * 3) + 1;
+        i = i + 1;
     } while(i <= num);
 
-    return (void*)ent;
+    return (void*)ent2;
 }
 
 //original address: $08000f04
@@ -120,7 +121,7 @@ void* gfx_reserve_oam_sprites(void* staging, uint16_t num_sprites){
     uint8_t* cur_spr = first_spr;
     if (num_sprites != 0){
         for(uint16_t i = 0; i < num_sprites; i++){
-            cur_spr[5] &= 0xf7;
+            cur_spr[5] &= 0xf3 | 4;
             cur_spr[1] &= 0xc0;
             cur_spr[3] &= 0xc1;
             ((uint16_t*)cur_spr)[3] = 0;
@@ -139,9 +140,9 @@ void gfx_display_complex_obj(uint16_t* arr_data, int16_t tile_base, uint32_t pal
 
     if(*arr_data != 0){
         for(uint16_t i = 0; i < *arr_data; i++){
-            dst[0] = (src[0] + (base_y & 0xffU)) | src[1] << 8;
-            dst[1] = (base_x + (((uint16_t*)src)[1] & 0x1ff)) | src[3] << 8;
-            dst[2] = (tile_base + (((uint16_t*)src)[2] & 0x3ff)) | (priority & 0xff) << 10 | pal_num << 0xc;
+            dst[0] = ((*src + base_y) & 0xffU) | (src[1] << 8);
+            dst[1] = (base_x + (((uint16_t*)src)[1] & 0x1ff)) | ((src[3] >> 1) << 9);
+            dst[2] = (tile_base + (((uint16_t*)src)[2] & 0x3ff)) | ((priority & 0xff) << 10) | (pal_num << 0xc);
             dst += 4;
             src += 6;
         }
