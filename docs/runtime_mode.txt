@@ -2,7 +2,7 @@ Mother 3 (english version v1.3) runtime modes:
 
 The variable that holds the runtime mode lives at 0x2004848, and it's 1 byte long.
 It is an enum that represents what "runtime mode" the game is in:
-00 = naming screen
+00 = new game
 01 = unused
 02 = gameplay from new game
 03 = gameplay from continue

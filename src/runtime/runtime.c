@@ -10,7 +10,7 @@
 void runtime_dispatch(){
 	do {
 		switch(runtime.mode){
-			case MODE_NAMING:
+			case MODE_NEW_GAME:
                 rt_mode_naming();
                 rt_mode_gameplay();
                 //TODO: if (main_menu_outcome != 6) mode_menu();

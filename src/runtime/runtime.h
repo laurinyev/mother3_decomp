@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 typedef __attribute__((mode(QI))) enum {
-    MODE_NAMING,
+    MODE_NEW_GAME,
     MODE_UNUSED,
     MODE_PLAY_FROM_NEW_GAME,
     MODE_PLAY_FROM_CONTINUE,
