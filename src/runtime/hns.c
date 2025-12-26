@@ -127,8 +127,6 @@ void hns_loop(){
             goto dont_draw_text;
         }
 
-        //logic goes here
-
         wait_for_vblank();
         gfx_commit();
         frame_count++;
